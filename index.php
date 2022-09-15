@@ -761,7 +761,52 @@ $isThisATA = $auth ? verifyTA(phpCAS::getUser()) : false;
 
 			<center>
 
+				<div class="container2">
 
+
+					<div class="options">
+						<div class="passOffOption">
+							<label for="passOffCheckBox"> Pass Off?</label>
+							<br />
+							<input type="checkbox" id="passOffCheckBox" />
+						</div>
+					</div>
+					<div class="virtuallink">
+						<input class="form-control questionInpu" type="text" id="zoomLinkInput" placeholder="Paste your zoom link here (e.g. https://byu.zoom.us/my/cosmo)" maxlength="300" />
+					</div>
+					<div class="question">
+						<input class="form-control" type="text" id="questionInput" placeholder="Enter your question here" maxlength="300" />
+					</div>
+					<div class="submit">
+						<button id="getHelpInPersonButton" class="helpButton btn btn-success" style="height:50px;">I'm in person</button>
+						<button id="getHelpOnZoomButton" class="helpButton btn btn-success" style="height:50px;">I'm on Zoom</button>
+						<br />
+						<span id="getHelpError"></span>
+					</div>
+
+					<div id="questionsRequired">
+						<!-- This is for when questions are required -->
+						<div class="questionTextContainer">
+
+							<!-- <span style="float:left; font-size:75%;" id="questionInputLengthLeft"></span> -->
+						</div>
+						<div class="col-xs-1">
+							<!-- <strong>OR</strong> -->
+						</div>
+						<div class="col-xs-2">
+
+						</div><br />
+						<div style="padding-top: 20px;"></div>
+						<div class="row">
+							<!-- wont initally be disabled -->
+
+						</div>
+					</div>
+					<!-- <div id="questionsNotRequired">
+	<button id="getHelpButtonNoQuestion" class="btn btn-success noQuestionRequiredButtons" style="width:45%; height:50px;">Get Help</button>
+	<button id="passOffButtonNoQuestion" class="btn btn-info noQuestionRequiredButtons" style="width:45%; height:50px;">Pass Off</button>
+</div> -->
+				</div>
 				<!-- <div class="container">
 			<div class="row" style="width:80%;">
 				<div id="questionsRequired">	<!-- This is for when questions are required -- >

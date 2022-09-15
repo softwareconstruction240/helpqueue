@@ -1,34 +1,34 @@
-.myRow
-{
-	padding-bottom:10px;
-	padding-top:10px;
+.myRow {
+    padding-bottom: 10px;
+    padding-top: 10px;
 }
 
-input[type=checkbox]
-{
-  /* Double-sized Checkboxes */
-  -ms-transform: scale(2); /* IE */
-  -moz-transform: scale(2); /* FF */
-  -webkit-transform: scale(2); /* Safari and Chrome */
-  -o-transform: scale(2); /* Opera */
-  padding: 10px;
+input[type=checkbox] {
+    /* Double-sized Checkboxes */
+    -ms-transform: scale(2);
+    /* IE */
+    -moz-transform: scale(2);
+    /* FF */
+    -webkit-transform: scale(2);
+    /* Safari and Chrome */
+    -o-transform: scale(2);
+    /* Opera */
+    padding: 10px;
 }
 
-.checkboxtext
-{
-  /* Checkbox text */
-  font-size: 110%;
-  display: inline;
+.checkboxtext {
+    /* Checkbox text */
+    font-size: 110%;
+    display: inline;
 }
 
-.settingsRow
-{
-	padding: 10px;
-	text-align: left;
+.settingsRow {
+    padding: 10px;
+    text-align: left;
 }
 
-th, td
-{
+th,
+td {
     padding: 5px;
 }
 
@@ -36,51 +36,89 @@ th, td
     border-collapse: collapse;
 }
 
-.tableHeader, .tableData {
+.tableHeader,
+.tableData {
     border: 1px solid black;
 }
 
-.topHeader
-{
-	border-bottom:2px solid black;
+.topHeader {
+    border-bottom: 2px solid black;
 }
 
-.bottomHeader
-{
-	border-top:2px solid black;
+.bottomHeader {
+    border-top: 2px solid black;
 }
 
-.borderThickRight
-{
-	border-right:2px solid black;
+.borderThickRight {
+    border-right: 2px solid black;
 }
 
-.borderThickLeft
-{
-	border-left:2px solid black;
+.borderThickLeft {
+    border-left: 2px solid black;
 }
 
-.aSquare {   
-	position:relative;
+.aSquare {
+    position: relative;
     float: left;
     width: 20px;
     height: 20px;
     margin: 5px;
-	margin-top:0px;
+    margin-top: 0px;
     border-width: 1px;
     border-style: solid;
-    border-color: rgba(0,0,0,.2);
-	cursor:pointer;
+    border-color: rgba(0, 0, 0, .2);
+    cursor: pointer;
 }
 
-.graphRawDataTh
-{
-	text-align:center;
+.graphRawDataTh {
+    text-align: center;
 }
 
-.gettingHelpRow
-{
-	background-color:#DEDEDE
+.gettingHelpRow {
+    background-color: #DEDEDE
 }
 
+/* some new stuff */
 
+.container2 {
+    padding: 3vw 5vw;
+    width: 80%;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-auto-columns: 1fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+        "options"
+        "virtuallink"
+        "question"
+        "submit";
+}
+
+.options {
+    grid-area: options;
+    padding-right: 10px;
+
+    display: flex;
+    justify-content: center;
+    column-gap: 2rem;
+}
+
+.virtuallink {
+    padding-top: 10px;
+    grid-area: virtuallink;
+}
+
+.question {
+    grid-area: question;
+}
+
+.submit {
+    grid-area: submit;
+}
+
+#getHelpButton {
+    width: 30%;
+}
