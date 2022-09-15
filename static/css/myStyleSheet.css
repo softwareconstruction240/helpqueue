@@ -1,0 +1,86 @@
+.myRow
+{
+	padding-bottom:10px;
+	padding-top:10px;
+}
+
+input[type=checkbox]
+{
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(2); /* IE */
+  -moz-transform: scale(2); /* FF */
+  -webkit-transform: scale(2); /* Safari and Chrome */
+  -o-transform: scale(2); /* Opera */
+  padding: 10px;
+}
+
+.checkboxtext
+{
+  /* Checkbox text */
+  font-size: 110%;
+  display: inline;
+}
+
+.settingsRow
+{
+	padding: 10px;
+	text-align: left;
+}
+
+th, td
+{
+    padding: 5px;
+}
+
+#tableInner {
+    border-collapse: collapse;
+}
+
+.tableHeader, .tableData {
+    border: 1px solid black;
+}
+
+.topHeader
+{
+	border-bottom:2px solid black;
+}
+
+.bottomHeader
+{
+	border-top:2px solid black;
+}
+
+.borderThickRight
+{
+	border-right:2px solid black;
+}
+
+.borderThickLeft
+{
+	border-left:2px solid black;
+}
+
+.aSquare {   
+	position:relative;
+    float: left;
+    width: 20px;
+    height: 20px;
+    margin: 5px;
+	margin-top:0px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(0,0,0,.2);
+	cursor:pointer;
+}
+
+.graphRawDataTh
+{
+	text-align:center;
+}
+
+.gettingHelpRow
+{
+	background-color:#DEDEDE
+}
+
+

@@ -1,0 +1,49 @@
+Configuration
+------------------------------------------------------------------------------
+
+1) Fixe permissions
+The process for initialization is somewhat straightfoward once
+permissions are set correctly.
+
+Here are the required permissions:
+
+# file: .
+# owner: egm
+# group: cs224ta
+# flags: -s-
+user::rwx
+user:www-data:rwx
+group::rwx
+group:cs224ta:rwx
+mask::rwx
+other::--x
+default:user::rwx
+default:user:www-data:rwx
+default:group::rwx
+default:mask::rwx
+default:other::---
+
+setfacl -m to modify or -x to remove enable changes the ACLs. The most
+imporant ACL is the www-data in the default ACLs; it makes it so the scripts run as the
+user, but as a default ACL, anything created in the directory will inherit that same user access:
+
+setfacl -d -m user:www-data:rwx public_html
+
+2) Clone the files
+git clone egm@schizo.cs.byu.edu:./private-git/courses/cs236-helpqueue.git helpqueue
+
+3) Point the browser to
+https://students.cs.byu.edu/~cs224ta/helpqueue/DBInit.php
+
+If you get an internal script error, reload the page to be sure you are logged-into the system.
+
+4) Point the browser to
+https://students.cs.byu.edu/~cs224ta/helpqueue/DBInit.php
+
+If it does not prompt for the name of the course, then delete database.sqlite, and then reload the page.
+
+
+
+ 
+
+

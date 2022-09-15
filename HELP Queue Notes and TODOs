@@ -1,0 +1,53 @@
+NOTES:
+	No two TAs can have the EXACT same name. It causes issues is various parts of the queue. Make each TA NAME unique.
+
+	If a students gets inline, and then gets out again BEFORE a TA clicks "Offer Assistance" it does not show any thing on
+		the stats page. If the students gets in line, and the TA clicks "Offer Assistance" and then the student removes him/
+		her self from the queue it is reflected on the stats page.
+
+	When viewing questions (extended stats) if you sort by Time Spent With TA it sorts by strings, not ints.
+		Looked into fixing this but ran out of time. The link to do it is here:http://stackoverflow.com/questions/11341379/datatables-sorts-strings-instead-of-numeric
+
+	The names of people are downloaded when the page is refreshed. At the beggining of the semester a TA may be 
+		logged in and waiting for students. If the TA first logs in, then a student logs in, and enters their name
+		(as they must do the first time the go to the page), and then gets in line their name won't show up on the 
+		queue. It will be null. Just refresh the page and it will be there. This is only an issue at the beggining 
+		of the semester, or any time a new student enters their name after that TA has loaded the page.
+
+	When a TA clicks "Offer Assistance", the student is "dequeued". That just means the "dequeued" time has been set.
+		They will technically still be in the QUEUE Table on the database. This is because the QUEUE table is what is sent
+		over the wire to display on the main page. Once the TA clicks remove only then will the student be removed
+		from the QUEUE table. 
+
+	DequeueTime refers to the time at which a TA clicked "Offer Assistance". (Applies for the QUEUEHISTORY table)
+	EnqueueTime refers to the time the student clicked "Get in line".
+	StartedGettingHelpTime refers to the time that TA clicked "Offer Assistance". (Applies for the QUEUE table).
+	DoneGettingHelpTime refers to the time when the TA clicked "Remove" OR when the student clicked "Done getting help".
+
+	The usage graphs showing Average Wait time and Dequeues per hour include the time when a student dequeues themselves with out 
+		ever getting help. The average time spent with the TA includes only when a TA has pressed "Offer assistance". Once the TA
+		presses that button, from then on, no matter if the TA or the student do a removal, the data is still reflected in 
+		"Average Time spent with a TA".
+
+	Anytime a "time of day" is specified in the extended stats it includes the whole hour. That is to say if the specified end time was
+		9:00 am. Then all entires in the 9 oclock hour are included. (9:00 - 9:59:59). 
+
+
+TODOs (what I was going to work on next)
+	-When a student is currently being helped, stop the flashing title. (index.js update)
+	-Add a button to the queue for the TAs that would remove a person with out logging it anywhere
+		(much like the clear button but for only one specific person). Used when a person gets in line
+		but never shows up.
+	-On the Questions tab in the extended stats the "Time Spent With a TA" column is sorted by strings value
+		not int value (so an order would be 1,1.4,100,2,20.4,3.3)
+	-Edit TAs page looks slightly funky on mobile devices (it works and is usable, but check box and edit botton
+		dont look well together)
+	-When a question is not required (check box in setting tab) the buttons on the student side get slightly messed
+		up on a mobile device. Most obviously when a student is in line. The button text extends passed the actual 
+		button
+	-Update the TA side of things when a question is not required. AKA Dont show the "Question" column when noone is required
+		to enter a question in.
+	-Enter in a note such as "Questions were not required at this time" in the question column of the questions tab on the 
+		extended stats. Something to just indicate that the reason the line is blank is because questions weren't required
+		at the time the student got in line.
+
