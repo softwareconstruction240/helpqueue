@@ -1579,6 +1579,7 @@ $(function () {//set stuff up once jquery loads
 	$(".helpButton").on('click', function () {
 		var theQuestion = $("#questionInput").val();
 		var passOff = $("#passOffCheckBox").is(":checked");
+		const zoomLink = $("#zoomLinkInput")
 
 		//validate input, but only already in line
 		if ((theQuestion.length < 6 && passOff == false) && !poll) {
@@ -1591,7 +1592,7 @@ $(function () {//set stuff up once jquery loads
 
 			spin("helpButton");
 
-			submitRequest(user, theQuestion, passOff);
+			submitRequest(user, theQuestion, passOff, zoomLink);
 		}
 	});
 
@@ -1610,14 +1611,15 @@ $(function () {//set stuff up once jquery loads
 
 	});
 
-	function submitRequest(user, theQuestion, passOff) {
+	function submitRequest(user, theQuestion, passOff, zoomLink) {
 		poll = true;
 		pauseUpdate = true;
 		var userInfo =
 		{
 			username: user,
 			question: theQuestion,
-			passOff: passOff
+			passOff: passOff,
+			zoomLink
 		};
 
 		var success = function (data) {
