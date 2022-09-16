@@ -198,17 +198,17 @@ function enqueue($userId, $question, $passOff, $zoomLink)
 				$question = str_replace($invalid_characters, "", $question);
 				$passOff = str_replace($invalid_characters, "", $passOff);
 
-				if ($passOff == "true") {
-					$question = "PASS OFF";
-				} else //not passing off
-				{
-					if ($question == "PASS OFF") {
-						$db->exec("ROLLBACK;");
-						$db->close();
-						unset($db);
-						return array("status" => "error", "message" => "Not a valid question. If you want to pass off click the check box");
-					}
-				}
+				// if ($passOff == "true") {
+				// 	$question = "PASS OFF";
+				// } else //not passing off
+				// {
+				// 	if ($question == "PASS OFF") {
+				// 		$db->exec("ROLLBACK;");
+				// 		$db->close();
+				// 		unset($db);
+				// 		return array("status" => "error", "message" => "Not a valid question. If you want to pass off click the check box");
+				// 	}
+				// }
 
 				if (strlen($question) > 300) {
 					$db->exec("ROLLBACK;");
@@ -523,7 +523,7 @@ function getUserStatus($userId)
 	$itemInQueue;
 
 	if ($row = $result->fetchArray(SQLITE3_ASSOC)) {
-		$itemInQueue = array("status" => "success", "userId" => $row["NetId"], "name" => $row["name"], "spot" => $row["QUEUENUM"], "enqueueTime" => $row["ENQUEUETIME"], "helpScore" => $row["Counter"], "settings" => $settings, "avgs" => $avgs, "question" => $row["QUESTION"], "passOff" => $row["PASSOFF"], "startedGettingHelpTime" => $row["STARTEDGETTINGHELPTIME"], "beingHelpedBy" => $row["BeingHelpedBy"]);
+		$itemInQueue = array("status" => "success", "userId" => $row["NetId"], "name" => $row["name"], "spot" => $row["QUEUENUM"], "enqueueTime" => $row["ENQUEUETIME"], "helpScore" => $row["Counter"], "settings" => $settings, "avgs" => $avgs, "question" => $row["QUESTION"], "passOff" => $row["PASSOFF"], "startedGettingHelpTime" => $row["STARTEDGETTINGHELPTIME"], "beingHelpedBy" => $row["BeingHelpedBy"], "zoomLink" => $row["ZOOMLINK"]);
 	} else {
 		$itemInQueue = array("status" => 'success', "userId" => $userId, "spot" => -1, "enqueueTime" => 0, "settings" => $settings, "avgs" => $avgs);
 	}
