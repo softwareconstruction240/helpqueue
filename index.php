@@ -199,7 +199,7 @@ $isThisATA = $auth ? verifyTA(phpCAS::getUser()) : false;
 						<!--<div class="col-xs-3">
 						<strong>Net Id</strong>
 					</div>-->
-						<div class="col-xs-2">
+						<div class="col-xs-1">
 							<strong>Name</strong>
 						</div>
 						<div class="col-xs-4">
@@ -210,6 +210,9 @@ $isThisATA = $auth ? verifyTA(phpCAS::getUser()) : false;
 						</div>
 						<div class="col-xs-2">
 							<strong>Time</strong>
+						</div>
+						<div class="col-xs-1">
+							<strong>Times Helped</strong>
 						</div>
 						<div class="col-xs-2">
 							<strong>Action</strong>
@@ -781,7 +784,7 @@ $isThisATA = $auth ? verifyTA(phpCAS::getUser()) : false;
 						<input class="form-control" type="text" id="questionInput" placeholder="Enter your question here" maxlength="300" />
 					</div>
 					<div class="submit">
-						<button id="getHelpInPersonButton" class="helpButton btn btn-success" style="height:50px;">I'm in person</button>
+						<button id="getHelpInPersonButton/" class="helpButton btn btn-success" style="height:50px;">I'm in person</button>
 						<button id="getHelpOnZoomButton" class="helpButton btn btn-success" style="height:50px;">I'm on Zoom</button>
 						<br />
 						<span id="getHelpError"></span>

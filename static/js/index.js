@@ -151,8 +151,10 @@ function verifyStudentInputToggleButton() {
 			//enable the get in line button
 			$(".helpButton").removeAttr('disabled');
 			// $(".helpButton").html('Get in line for help');
-			if ($("#zoomLinkInput").val().length < 10)
+			if ($("#zoomLinkInput").val().length < 10) {
 				$("#getHelpOnZoomButton").attr('disabled', 'disabled')
+				$("#getHelpError").html('Enter a valid Zoom link to request remote help');
+			}
 			$("#getHelpError").html('');
 		}
 		else //not valid input
@@ -2569,22 +2571,22 @@ function updateUI(data) {
 			if (obj.startedGettingHelpTime == null) //waiting in line
 			{
 				output = '<div class="row myRow" id="' + obj.netId + '">' +
-					'<div class="col-xs-2">' + obj.name + '</div>' +
+					'<div class="col-xs-1">' + obj.name + '</div>' +
 					questionColumn +
 					'<div class="col-xs-2">' + obj.zoomLink + '</div>' +
 					'<div class="col-xs-2">' + getTimeDifference(parseInt(obj.enqueueTime)) + '</div>' +
+					'<div class="col-xs-1">' + obj.helpScore + '</div>' +
 					'<div class="col-xs-2"><button id="removeButton' + obj.netId + '" onClick=removePerson(\'' + obj.netId + '\') class="btn btn-info btn-lg fa fa-ambulance"> Offer Assistance' +
 					'</button></div></div>';
 			}
 			else // currently getting help
 			{
-				console.log('heyyyy')
-				console.log(obj)
 				output = '<div class="row myRow gettingHelpRow" id="' + obj.netId + '">' +
-					'<div class="col-xs-2">' + obj.name + '<br/>(Being helped by: ' + convertNetIdToName(obj.beingHelpedBy) + ')</div>' +
+					'<div class="col-xs-1">' + obj.name + '<br/>(Being helped by: ' + convertNetIdToName(obj.beingHelpedBy) + ')</div>' +
 					questionColumn +
 					'<div class="col-xs-2">' + obj.zoomLink + '</div>' +
 					'<div class="col-xs-2">' + getTimeDifference(parseInt(obj.startedGettingHelpTime)) + '</div>' +
+					'<div class="col-xs-1">' + obj.helpScore + '</div>' +
 					'<div class="col-xs-2"><button id="removeButton' + obj.netId + '" onClick=removePerson(\'' + obj.netId + '\') class="btn btn-danger btn-lg fa fa-times"> Remove' +
 					'</button></div></div>';
 			}
