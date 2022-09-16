@@ -609,10 +609,11 @@ function getQueue($db)
 	$listToReturn = array();
 	//******************************************
 	while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
-		$itemInQueue = array("netId" => $row["NetId"], "name" => $row["name"], "spot" => $row["QUEUENUM"], "enqueueTime" => $row["ENQUEUETIME"], "helpScore" => $row["Counter"], "question" => $row["QUESTION"], "passOff" => $row["PASSOFF"], "startedGettingHelpTime" => $row["STARTEDGETTINGHELPTIME"], "beingHelpedBy" => $row["BeingHelpedBy"]);
+		$itemInQueue = array("netId" => $row["NetId"], "name" => $row["name"], "spot" => $row["QUEUENUM"], "enqueueTime" => $row["ENQUEUETIME"], "helpScore" => $row["Counter"], "question" => $row["QUESTION"], "passOff" => $row["PASSOFF"], "startedGettingHelpTime" => $row["STARTEDGETTINGHELPTIME"], "beingHelpedBy" => $row["BeingHelpedBy"], "zoomLink" => $row["ZOOMLINK"]);
 
 		// Insert hyperlink tags if there is a zoom link found within the question
 		$itemInQueue["question"] = insertTags($itemInQueue["question"]);
+		$itemInQueue["zoomLink"] = insertTags($itemInQueue["zoomLink"]);
 
 		array_push($listToReturn, $itemInQueue);
 	}

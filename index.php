@@ -199,11 +199,14 @@ $isThisATA = $auth ? verifyTA(phpCAS::getUser()) : false;
 						<!--<div class="col-xs-3">
 						<strong>Net Id</strong>
 					</div>-->
-						<div class="col-xs-3">
+						<div class="col-xs-2">
 							<strong>Name</strong>
 						</div>
-						<div class="col-xs-5">
+						<div class="col-xs-4">
 							<strong>Question</strong>
+						</div>
+						<div class="col-xs-2">
+							<strong>Zoom Link</strong>
 						</div>
 						<div class="col-xs-2">
 							<strong>Time</strong>
@@ -766,7 +769,7 @@ $isThisATA = $auth ? verifyTA(phpCAS::getUser()) : false;
 
 					<div class="options">
 						<div class="passOffOption">
-							<label for="passOffCheckBox"> Pass Off?</label>
+							<label for="passOffCheckBox">Pass Off?</label>
 							<br />
 							<input type="checkbox" id="passOffCheckBox" />
 						</div>

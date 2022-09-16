@@ -1579,7 +1579,7 @@ $(function () {//set stuff up once jquery loads
 	$(".helpButton").on('click', function () {
 		var theQuestion = $("#questionInput").val();
 		var passOff = $("#passOffCheckBox").is(":checked");
-		const zoomLink = $("#zoomLinkInput")
+		const zoomLink = $("#zoomLinkInput").val()
 
 		//validate input, but only already in line
 		if ((theQuestion.length < 6 && passOff == false) && !poll) {
@@ -2557,11 +2557,11 @@ function updateUI(data) {
 				obj.question = "NONE";
 
 			//the default, non pass off view
-			var questionColumn = '<div class="col-xs-5">' + obj.question + '</div>';
+			var questionColumn = '<div class="col-xs-4">' + obj.question + '</div>';
 
 			if (obj.passOff == "true")//oh! its a pass off!
 			{
-				questionColumn = '<div class="col-xs-5" style="background-color:' + currentPassOffHighlightColor + '">' + obj.question + '</div>';
+				questionColumn = '<div class="col-xs-4" style="background-color:' + currentPassOffHighlightColor + '">' + obj.question + '</div>';
 			}
 
 
@@ -2569,17 +2569,21 @@ function updateUI(data) {
 			if (obj.startedGettingHelpTime == null) //waiting in line
 			{
 				output = '<div class="row myRow" id="' + obj.netId + '">' +
-					'<div class="col-xs-3">' + obj.name + '</div>' +
+					'<div class="col-xs-2">' + obj.name + '</div>' +
 					questionColumn +
+					'<div class="col-xs-2">' + obj.zoomLink + '</div>' +
 					'<div class="col-xs-2">' + getTimeDifference(parseInt(obj.enqueueTime)) + '</div>' +
 					'<div class="col-xs-2"><button id="removeButton' + obj.netId + '" onClick=removePerson(\'' + obj.netId + '\') class="btn btn-info btn-lg fa fa-ambulance"> Offer Assistance' +
 					'</button></div></div>';
 			}
 			else // currently getting help
 			{
+				console.log('heyyyy')
+				console.log(obj)
 				output = '<div class="row myRow gettingHelpRow" id="' + obj.netId + '">' +
-					'<div class="col-xs-3">' + obj.name + '<br/>(Being helped by: ' + convertNetIdToName(obj.beingHelpedBy) + ')</div>' +
+					'<div class="col-xs-2">' + obj.name + '<br/>(Being helped by: ' + convertNetIdToName(obj.beingHelpedBy) + ')</div>' +
 					questionColumn +
+					'<div class="col-xs-2">' + obj.zoomLink + '</div>' +
 					'<div class="col-xs-2">' + getTimeDifference(parseInt(obj.startedGettingHelpTime)) + '</div>' +
 					'<div class="col-xs-2"><button id="removeButton' + obj.netId + '" onClick=removePerson(\'' + obj.netId + '\') class="btn btn-danger btn-lg fa fa-times"> Remove' +
 					'</button></div></div>';
