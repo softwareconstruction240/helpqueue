@@ -212,7 +212,7 @@ $isThisATA = $auth ? verifyTA(phpCAS::getUser()) : false;
 							<strong>Time</strong>
 						</div>
 						<div class="col-xs-1">
-							<strong>Times Helped</strong>
+							<strong>Times Helped Today</strong>
 						</div>
 						<div class="col-xs-2">
 							<strong>Action</strong>

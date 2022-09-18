@@ -2281,6 +2281,29 @@ function editRawData(id, action) {
 	});
 }
 
+function getDayHelpCount(netId, fn) {
+
+	getExtendedStats(
+		"?netId=" + netId + "&startTime=&endTime=",
+		data => {
+			let timesHelped = 0
+			const thisMorning = new Date(
+				new Date().getFullYear(),
+				new Date().getMonth(),
+				new Date().getDate()
+			)
+			data.studentData.forEach(question => {
+				if (question.passOff != "true" && question.enqueueTime > thisMorning) {
+					timesHelped++
+				}
+
+			});
+			fn(timesHelped)
+		},
+		data => { }
+	)
+}
+
 function updateUI(data) {
 
 	if (data.hasOwnProperty("settings")) {
@@ -2566,31 +2589,34 @@ function updateUI(data) {
 				questionColumn = '<div class="col-xs-4" style="background-color:' + currentPassOffHighlightColor + '">' + obj.question + '</div>';
 			}
 
+			getDayHelpCount(obj.netId, timesHelped => {
+				var output;
+				if (obj.startedGettingHelpTime == null) //waiting in line
+				{
+					output = '<div class="row myRow" id="' + obj.netId + '">' +
+						'<div class="col-xs-1">' + obj.name + '</div>' +
+						questionColumn +
+						'<div class="col-xs-2">' + obj.zoomLink + '</div>' +
+						'<div class="col-xs-2">' + getTimeDifference(parseInt(obj.enqueueTime)) + '</div>' +
+						'<div class="col-xs-1">' + timesHelped + '</div>' +
+						'<div class="col-xs-2"><button id="removeButton' + obj.netId + '" onClick=removePerson(\'' + obj.netId + '\') class="btn btn-info btn-lg fa fa-ambulance"> Offer Assistance' +
+						'</button></div></div>';
+				}
+				else // currently getting help
+				{
+					output = '<div class="row myRow gettingHelpRow" id="' + obj.netId + '">' +
+						'<div class="col-xs-1">' + obj.name + '<br/>(Being helped by: ' + convertNetIdToName(obj.beingHelpedBy) + ')</div>' +
+						questionColumn +
+						'<div class="col-xs-2">' + obj.zoomLink + '</div>' +
+						'<div class="col-xs-2">' + getTimeDifference(parseInt(obj.startedGettingHelpTime)) + '</div>' +
+						'<div class="col-xs-1">' + timesHelped + '</div>' +
+						'<div class="col-xs-2"><button id="removeButton' + obj.netId + '" onClick=removePerson(\'' + obj.netId + '\') class="btn btn-danger btn-lg fa fa-times"> Remove' +
+						'</button></div></div>';
+				}
+				$('#list').append(output);
+			})
 
-			var output;
-			if (obj.startedGettingHelpTime == null) //waiting in line
-			{
-				output = '<div class="row myRow" id="' + obj.netId + '">' +
-					'<div class="col-xs-1">' + obj.name + '</div>' +
-					questionColumn +
-					'<div class="col-xs-2">' + obj.zoomLink + '</div>' +
-					'<div class="col-xs-2">' + getTimeDifference(parseInt(obj.enqueueTime)) + '</div>' +
-					'<div class="col-xs-1">' + obj.helpScore + '</div>' +
-					'<div class="col-xs-2"><button id="removeButton' + obj.netId + '" onClick=removePerson(\'' + obj.netId + '\') class="btn btn-info btn-lg fa fa-ambulance"> Offer Assistance' +
-					'</button></div></div>';
-			}
-			else // currently getting help
-			{
-				output = '<div class="row myRow gettingHelpRow" id="' + obj.netId + '">' +
-					'<div class="col-xs-1">' + obj.name + '<br/>(Being helped by: ' + convertNetIdToName(obj.beingHelpedBy) + ')</div>' +
-					questionColumn +
-					'<div class="col-xs-2">' + obj.zoomLink + '</div>' +
-					'<div class="col-xs-2">' + getTimeDifference(parseInt(obj.startedGettingHelpTime)) + '</div>' +
-					'<div class="col-xs-1">' + obj.helpScore + '</div>' +
-					'<div class="col-xs-2"><button id="removeButton' + obj.netId + '" onClick=removePerson(\'' + obj.netId + '\') class="btn btn-danger btn-lg fa fa-times"> Remove' +
-					'</button></div></div>';
-			}
-			$('#list').append(output);
+
 		});
 
 	}
