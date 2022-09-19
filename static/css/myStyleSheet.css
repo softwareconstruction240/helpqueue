@@ -122,3 +122,16 @@ td {
 #getHelpButton {
     width: 30%;
 }
+
+#zoomLinkInput {
+    width: 50%;
+}
+
+.helpButton {
+    font-size: x-large;
+    color: black;
+}
+
+.helpButton.btn-danger {
+    color: white;
+}

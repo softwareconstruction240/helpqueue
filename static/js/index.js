@@ -154,13 +154,14 @@ function verifyStudentInputToggleButton() {
 			if ($("#zoomLinkInput").val().length < 10) {
 				$("#getHelpOnZoomButton").attr('disabled', 'disabled')
 				$("#getHelpError").html('Enter a valid Zoom link to request remote help');
+			} else {
+				$("#getHelpError").html('');
 			}
-			$("#getHelpError").html('');
 		}
 		else //not valid input
 		{
 			$(".helpButton").attr('disabled', 'disabled');
-			// $(".helpButton").html('Enter a question or click Pass Off');
+			$("#getHelpError").html('Enter a question or click Pass Off');
 		}
 
 		$("#getHelpButtonNoQuestion").addClass("btn-success");
@@ -2421,6 +2422,9 @@ function updateUI(data) {
 				$("#questionInput").removeAttr('disabled');
 				$("#passOffCheckBox").removeAttr('disabled');
 
+				$('.enqueueButton').show()
+				$("#stopGettingHelped").hide()
+
 				$("#passOffButtonNoQuestion").removeAttr('disabled');
 				$("#getHelpButtonNoQuestion").removeAttr('disabled');
 
@@ -2438,6 +2442,10 @@ function updateUI(data) {
 			else //in line
 			{
 				$(".helpButton").removeClass("btn-success");
+				$(".enqueueButton").hide()
+				$("#stopGettingHelped").show()
+				$("#stopGettingHelped").removeAttr('disabled')
+				$("#getHelpError").html('')
 				$("#passOffButtonNoQuestion").removeClass("btn-warning");
 				$("#getHelpButtonNoQuestion").removeClass("btn-warning");
 				$(".helpButton").addClass("btn-danger");
@@ -2460,7 +2468,7 @@ function updateUI(data) {
 						$("#getHelpButtonNoQuestion").html("You are in line to pass off");
 					}
 					else {
-						$("#passOffButtonNoQuestion").html("Be done getting help");
+						$("#passOffButtonNoQuestion").html("I'm done getting help");
 						$("#getHelpButtonNoQuestion").html("You are currently being helped");
 					}
 				}
@@ -2487,11 +2495,11 @@ function updateUI(data) {
 				if (data.startedGettingHelpTime == null) {
 					var postfix = getNumberPostFix(spot);
 
-					$("#getHelpButton").html("Get out of line");
+					$("#stopGettingHelped").html("Get out of line");
 					$("#queueNum").html('You are currently the <strong>' + spot + postfix + '</strong> in line to get help');
 				}
 				else {
-					$("#getHelpButton").html("Done getting help");
+					$("#stopGettingHelped").html("Done getting help");
 					$("#queueNum").html('<strong>You are currently being helped</strong>');
 				}
 				helpButtonHandle = "/removeFromQueue.php";
