@@ -4,7 +4,7 @@ class MyDB extends SQLite3
 {
 	function __construct()
 	{
-		$dbName = 'database.sqlite';
+		$dbName = '../../queuedb/database.sqlite';
 		$initDB = false;
 		$initDB = !file_exists($dbName);
 
@@ -157,7 +157,17 @@ function enqueue($userId, $question, $passOff, $zoomLink)
 		$db->exec("COMMIT");
 		$db->close();
 		unset($db);
-		return array("status" => "success", "userId" => $findDupsRow["NetId"], "spot" => $findDupsRow["QUEUENUM"], "enqueueTime" => $findDupsRow["ENQUEUETIME"], "question" => $findDupsRow["QUESTION"], "passOff" => $findDupsRow["PASSOFF"], "gettingHelpTime" => $findDupsRow["STARTEDGETTINGHELPTIME"], "beingHelpedBy" => $findDupsRow["BeingHelpedBy"], "zoomLink" => $findDupsRow["ZOOMLINK"]);
+		return array(
+			"status" => "success",
+			"userId" => $findDupsRow["NetId"],
+			"spot" => $findDupsRow["QUEUENUM"],
+			"enqueueTime" => $findDupsRow["ENQUEUETIME"],
+			"question" => $findDupsRow["QUESTION"],
+			"passOff" => $findDupsRow["PASSOFF"],
+			"gettingHelpTime" => $findDupsRow["STARTEDGETTINGHELPTIME"],
+			"beingHelpedBy" => $findDupsRow["BeingHelpedBy"],
+			"zoomLink" => $findDupsRow["ZOOMLINK"]
+		);
 	} else {
 		$findDupsResult->finalize();
 		$findDupsStmt->close();
@@ -426,7 +436,14 @@ function getEnqueueDetails($db, $netId)
 
 	$toReturn = array();
 	if ($getTimeStampRow = $getTimeStampResult->fetchArray(SQLITE3_ASSOC)) {
-		$toReturn = array("enqueueTime" => $getTimeStampRow["ENQUEUETIME"], "question" => $getTimeStampRow["QUESTION"], "passOff" => $getTimeStampRow["PASSOFF"], "startedGettingHelpTime" => $getTimeStampRow["STARTEDGETTINGHELPTIME"], "beingHelpedBy" => $getTimeStampRow["BeingHelpedBy"], "queueNum" => $getTimeStampRow["QUEUENUM"]);
+		$toReturn = array(
+			"enqueueTime" => $getTimeStampRow["ENQUEUETIME"],
+			"question" => $getTimeStampRow["QUESTION"],
+			"passOff" => $getTimeStampRow["PASSOFF"],
+			"startedGettingHelpTime" => $getTimeStampRow["STARTEDGETTINGHELPTIME"],
+			"beingHelpedBy" => $getTimeStampRow["BeingHelpedBy"],
+			"queueNum" => $getTimeStampRow["QUEUENUM"]
+		);
 	}
 	$getTimeStampResult->finalize();
 	$getTimeStampStmt->close();
@@ -523,7 +540,21 @@ function getUserStatus($userId)
 	$itemInQueue;
 
 	if ($row = $result->fetchArray(SQLITE3_ASSOC)) {
-		$itemInQueue = array("status" => "success", "userId" => $row["NetId"], "name" => $row["name"], "spot" => $row["QUEUENUM"], "enqueueTime" => $row["ENQUEUETIME"], "helpScore" => $row["Counter"], "settings" => $settings, "avgs" => $avgs, "question" => $row["QUESTION"], "passOff" => $row["PASSOFF"], "startedGettingHelpTime" => $row["STARTEDGETTINGHELPTIME"], "beingHelpedBy" => $row["BeingHelpedBy"], "zoomLink" => $row["ZOOMLINK"]);
+		$itemInQueue = array(
+			"status" => "success",
+			"userId" => $row["NetId"],
+			"name" => $row["name"],
+			"spot" => $row["QUEUENUM"],
+			"enqueueTime" => $row["ENQUEUETIME"],
+			"helpScore" => $row["Counter"],
+			"settings" => $settings,
+			"avgs" => $avgs,
+			"question" => $row["QUESTION"],
+			"passOff" => $row["PASSOFF"],
+			"startedGettingHelpTime" => $row["STARTEDGETTINGHELPTIME"],
+			"beingHelpedBy" => $row["BeingHelpedBy"],
+			"zoomLink" => $row["ZOOMLINK"]
+		);
 	} else {
 		$itemInQueue = array("status" => 'success', "userId" => $userId, "spot" => -1, "enqueueTime" => 0, "settings" => $settings, "avgs" => $avgs);
 	}
@@ -579,11 +610,15 @@ function inTATable($userId)
 
 function insertTags($question)
 {
-	$regex = "/https:\/\/.*zoom.us\/.*\/[a-z|A-Z|0-9|?=&_\-+\.]+/i";
+	$regex = "/https?:\/\/.*\..*/i";
 	$numMatches = preg_match($regex, $question, $matches);
 
 	if ($numMatches == 1) {
 		// We found a match! so we need to replace it
+		// add https:// if missing
+		// if (strpos($matches[0], "https://") === false) {
+		// 	$matches[0] = "https://" . $matches[0];
+		// }
 		$url = $matches[0];
 		$newUrl = "<a href=\"" . $url . "\" target=\"_blank\">" . $url . "</a>";
 		return preg_replace($regex, $newUrl, $question);
@@ -609,7 +644,18 @@ function getQueue($db)
 	$listToReturn = array();
 	//******************************************
 	while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
-		$itemInQueue = array("netId" => $row["NetId"], "name" => $row["name"], "spot" => $row["QUEUENUM"], "enqueueTime" => $row["ENQUEUETIME"], "helpScore" => $row["Counter"], "question" => $row["QUESTION"], "passOff" => $row["PASSOFF"], "startedGettingHelpTime" => $row["STARTEDGETTINGHELPTIME"], "beingHelpedBy" => $row["BeingHelpedBy"], "zoomLink" => $row["ZOOMLINK"]);
+		$itemInQueue = array(
+			"netId" => $row["NetId"],
+			"name" => $row["name"],
+			"spot" => $row["QUEUENUM"],
+			"enqueueTime" => $row["ENQUEUETIME"],
+			"helpScore" => $row["Counter"],
+			"question" => $row["QUESTION"],
+			"passOff" => $row["PASSOFF"],
+			"startedGettingHelpTime" => $row["STARTEDGETTINGHELPTIME"],
+			"beingHelpedBy" => $row["BeingHelpedBy"],
+			"zoomLink" => $row["ZOOMLINK"]
+		);
 
 		// Insert hyperlink tags if there is a zoom link found within the question
 		$itemInQueue["question"] = insertTags($itemInQueue["question"]);

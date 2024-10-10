@@ -147,15 +147,18 @@ function verifyStudentInputToggleButton() {
 		removeSpinner("getHelpButtonNoQuestion");
 		removeSpinner("passOffButtonNoQuestion");
 
-		if (theQuestion.length > 6 || passOff) {
+		if (theQuestion.length > 0 || passOff) {
 			//enable the get in line button
-			$(".helpButton").removeAttr('disabled');
+			//$(".helpButton").removeAttr('disabled');
 			// $(".helpButton").html('Get in line for help');
 			if ($("#zoomLinkInput").val().length < 10) {
-				$("#getHelpOnZoomButton").attr('disabled', 'disabled')
+				$("#getHelpOnZoomButton").attr('disabled', 'disabled');
+				$("#getHelpInPersonButton").removeAttr('disabled');
 				$("#getHelpError").html('Enter a valid Zoom link to request remote help');
 			} else {
-				$("#getHelpError").html('');
+				$("#getHelpInPersonButton").attr('disabled', 'disabled');
+				$("#getHelpOnZoomButton").removeAttr('disabled');
+				$("#getHelpError").html('Remove zoom link to request in person help');
 			}
 		}
 		else //not valid input
@@ -170,6 +173,7 @@ function verifyStudentInputToggleButton() {
 		$("#getHelpButtonNoQuestion").html("Get Help");
 		$("#passOffButtonNoQuestion").html("Pass Off");
 
+		$("#zoomLinkInput").removeAttr('disabled')
 		$("#questionInput").removeAttr('disabled');
 		$("#passOffCheckBox").removeAttr('disabled');
 		$(".helpButton").addClass("btn-success");
@@ -1590,6 +1594,7 @@ $(function () {//set stuff up once jquery loads
 			alert("Please enter a question of click pass off");
 		}
 		else {
+			$("#zoomLinkInput").attr('disabled', 'disabled');
 			$("#questionInput").attr('disabled', 'disabled');
 			$("#passOffCheckBox").attr('disabled', 'disabled');
 
@@ -2282,26 +2287,29 @@ function editRawData(id, action) {
 	});
 }
 
-function getDayHelpCount(netId, fn) {
+function getDayHelpCount(netId, fn, fail) {
 
 	getExtendedStats(
 		"?netId=" + netId + "&startTime=&endTime=",
 		data => {
 			let timesHelped = 0
+			// let timesHelped = ''
 			const thisMorning = new Date(
 				new Date().getFullYear(),
 				new Date().getMonth(),
 				new Date().getDate()
 			)
 			data.studentData.forEach(question => {
-				if (question.passOff != "true" && question.enqueueTime > thisMorning) {
+				if (question.passOff != "true" && question.enqueueTime > thisMorning && question.removedBy != question.netId) {
 					timesHelped++
 				}
 
 			});
 			fn(timesHelped)
 		},
-		data => { }
+		data => {
+			fail('error')
+		}
 	)
 }
 
@@ -2338,6 +2346,7 @@ function updateUI(data) {
 					queueActive = value == "true" ? true : false;
 					if (value == "false") {
 						//disable question and pass off check
+						$("#zoomLinkInput").attr('disabled', 'disabled');
 						$("#questionInput").attr('disabled', 'disabled');
 						$("#passOffCheckBox").attr('disabled', 'disabled');
 					}
@@ -2507,9 +2516,12 @@ function updateUI(data) {
 
 				poll = true;
 				currentSpotInLine = spot;
+				$("#zoomLinkInput").attr('disabled', 'disabled')
 				$("#questionInput").attr('disabled', 'disabled');
 				$("#passOffCheckBox").attr('disabled', 'disabled');
 
+				if (data.hasOwnProperty('zoomLink'))
+					$("#zoomLinkInput").val(data.zoomLink);
 				if (data.hasOwnProperty('question'))
 					$("#questionInput").val(data.question);
 				if (data.hasOwnProperty('passOff'))
@@ -2520,7 +2532,11 @@ function updateUI(data) {
 	else if (data.hasOwnProperty("list")) {
 		if (data.list.length > 0) {
 			if (firstStudent) {
-				var audio = new Audio("newSound.mp3");
+				var audioFile = getRandomSound();
+				var audio = new Audio(audioFile);
+				if(audioFile == "storm.wav") audio.volume = 0.12;       //volume courtesy of Michael
+				else if(audioFile == "PLAY_ME.mp3") audio.volume = 0.18;
+				else audio.volume = 0.5;
 				audio.play();
 				firstStudent = false;
 			}
@@ -2583,21 +2599,45 @@ function updateUI(data) {
 		//if we are here the person logged in is a TA. turn polling on
 		poll = true;
 
-		//remove the elements in the list so it doesn't repeat and get huge
-		$('#list').empty();
-		$.each(data.list, function (index, obj) {
-			if (obj.question == null)
-				obj.question = "NONE";
+		const timesHelpedList = data.list.map(obj => {
+			return new Promise((resolve, reject) => {
+				getDayHelpCount(obj.netId,
+					timesHelped => {
+						resolve(timesHelped)
+					}, () => {
+						reject(0)
+					})
+			})
+		})
 
-			//the default, non pass off view
-			var questionColumn = '<div class="col-xs-4">' + obj.question + '</div>';
+		Promise.all(timesHelpedList).then(values => {
+			data.list = data.list.map((obj, index) => (
+				{
+					...obj,
+					timesHelped: values[index]
+				}
+			))
 
-			if (obj.passOff == "true")//oh! its a pass off!
-			{
-				questionColumn = '<div class="col-xs-4" style="background-color:' + currentPassOffHighlightColor + '">' + obj.question + '</div>';
-			}
+			$('#list').empty();
 
-			getDayHelpCount(obj.netId, timesHelped => {
+			// Always sort the queue by the enqueTime ASC of the request.
+			// Previously, the people being helped would jump around in different orders
+			// which is frustrating for a TA.
+			data.list.sort((a, b) => a.enqueueTime - b.enqueueTime)
+
+			$.each(data.list, function (index, obj) {
+				if (obj.question == null)
+					obj.question = "NONE";
+
+				//the default, non pass off view
+				var questionColumn = '<div class="col-xs-4">' + obj.question + '</div>';
+
+				if (obj.passOff == "true")//oh! its a pass off!
+				{
+					questionColumn = '<div class="col-xs-4" style="background-color:' + currentPassOffHighlightColor + '">' + obj.question + ' <p class="passoff-note">(passoff)</p>' + '</div>';
+				}
+
+
 				var output;
 				if (obj.startedGettingHelpTime == null) //waiting in line
 				{
@@ -2606,7 +2646,7 @@ function updateUI(data) {
 						questionColumn +
 						'<div class="col-xs-2">' + obj.zoomLink + '</div>' +
 						'<div class="col-xs-2">' + getTimeDifference(parseInt(obj.enqueueTime)) + '</div>' +
-						'<div class="col-xs-1">' + timesHelped + '</div>' +
+						'<div class="col-xs-1">' + obj.timesHelped + '</div>' +
 						'<div class="col-xs-2"><button id="removeButton' + obj.netId + '" onClick=removePerson(\'' + obj.netId + '\') class="btn btn-info btn-lg fa fa-ambulance"> Offer Assistance' +
 						'</button></div></div>';
 				}
@@ -2617,15 +2657,27 @@ function updateUI(data) {
 						questionColumn +
 						'<div class="col-xs-2">' + obj.zoomLink + '</div>' +
 						'<div class="col-xs-2">' + getTimeDifference(parseInt(obj.startedGettingHelpTime)) + '</div>' +
-						'<div class="col-xs-1">' + timesHelped + '</div>' +
+						'<div class="col-xs-1">' + obj.timesHelped + '</div>' +
 						'<div class="col-xs-2"><button id="removeButton' + obj.netId + '" onClick=removePerson(\'' + obj.netId + '\') class="btn btn-danger btn-lg fa fa-times"> Remove' +
 						'</button></div></div>';
 				}
 				$('#list').append(output);
-			})
 
 
-		});
+			});
+
+
+		})
+
+
+
+		//remove the elements in the list so it doesn't repeat and get huge
+
+
+		// let newQuestionTable = ''
+
+
+		// $('#list').html(newQuestionTable)
 
 	}
 
@@ -2671,15 +2723,15 @@ function updateUI(data) {
 
 	if (data.hasOwnProperty("avgs")) {
 		$("#topCount").empty()
-		$("#topAvg").empty();
-		$("#queueLen").empty();
+				$("#topAvg").empty();
+				$("#queueLen").empty();
 		$("#currentlyBeingHelped").empty();
 		$("#enqueueInLastXMin").empty();
 		$("#dequeueInLastXMin").empty();
 
 		$("#topCount").append(data.avgs.avgLen);
 		$("#queueLen").append(data.avgs.queueLen);
-		if (data.avgs.avg > 10) //just a random number above 0 to no give wrong results when noones on the queue
+				if (data.avgs.avg > 10) //just a random number above 0 to no give wrong results when noones on the queue
 			$("#topAvg").append(getTimeDifference(data.avgs.avg));
 		else
 			$("#topAvg").append("0");
@@ -2942,6 +2994,19 @@ function postData(userName, handle, callBackSuccess, callBackError) {
 		error: callBackError,
 		data: userName
 	});
+}
+
+function getRandomSound() { // Courtesy of Noah
+	// Distribution:
+	// 90%: new chime
+	// 5%: thunderstorm
+	// 4%: something else
+	// 1%: something special
+	var rand = Math.floor(Math.random() * 100);
+	if (rand < 90) return "not-bad.mp3";
+	else if (rand >= 90 && rand < 95) return "storm.wav";
+	else if (rand >= 95 && rand < 99) return "PLAY_ME.mp3";
+	else return "surprise.wav";
 }
 
 Chart.types.Bar.extend({

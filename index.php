@@ -184,6 +184,11 @@ $isThisATA = $auth ? verifyTA(phpCAS::getUser()) : false;
 		</div>
 
 
+		<h4>
+			<center>Please join the <a target="_blank" rel="noopener noreferrer" href="https://join.slack.com/t/cs240-fall2024/shared_invite/zt-2pxui8a4w-Iyvq5X8xoiTKo8P2YPN~qg"> course Slack</a>. See our TA schedule <a target="_blank" rel="noopener noreferrer" href="https://docs.google.com/document/d/12ZrcsQAfVirCuCwzI0TKX_tSPyBOjqB9vDE-sx1n_S0/edit">here</a></center>
+		</h4>
+
+
 
 
 		<?php
@@ -192,7 +197,7 @@ $isThisATA = $auth ? verifyTA(phpCAS::getUser()) : false;
 		?>
 			<!-- TA -->
 			<div style="text-align:center;">
-				<h2>Welcome TA to the Help Queue!!!!</h2>
+				<h2>Welcome TA to the Help Queue!</h2>
 				<div class="container" id="queue">
 					<!-- MAIN QUEUE PAGE -->
 					<div class="row">
@@ -419,7 +424,7 @@ $isThisATA = $auth ? verifyTA(phpCAS::getUser()) : false;
 									<canvas id="dequeuesPerHourGraph" width="500" height="400"></canvas>
 									<div style="text-align:center;"><span class="graphUnit"></div>
 								</div>
-								<br />
+								<br />			<h2>IF YOU ARE PASSING OFF, BE READY TO BE HELPED AT ANY TIME.</br</h2>
 								<div class="row">
 									<div style="text-align:center;"><strong> Average Time Spent with TA <span class="graphUnit"></strong></div>
 									<canvas id="avgTimeWithTAGraph" width="500" height="400"></canvas>
@@ -581,7 +586,7 @@ $isThisATA = $auth ? verifyTA(phpCAS::getUser()) : false;
 							<h4 class="modal-title">Course Title</h4>
 						</div>
 						<div class="modal-body">
-							<center>
+							<center>			<h2>IF YOU ARE PASSING OFF, BE READY TO BE HELPED AT ANY TIME.</br</h2>
 								<p>What is the name of the course this help queue is for?
 								</p>
 								<input type="text" id="courseNameInput" placeholder="Enter name here" width="70%"></input>
@@ -774,21 +779,23 @@ $isThisATA = $auth ? verifyTA(phpCAS::getUser()) : false;
 						<div class="passOffOption">
 							<label for="passOffCheckBox">Pass Off?</label>
 							<br />
-							<input type="checkbox" id="passOffCheckBox" />
+							<input type="checkbox" id="passOffCheckBox"  />
 						</div>
 					</div>
 					<div class="virtuallink">
+						<label for="zoomLinkInput">Zoom Link:</label>
 						<input class="form-control" type="text" id="zoomLinkInput" placeholder="Paste your zoom link here (e.g. https://byu.zoom.us/my/cosmo)" maxlength="300" />
 					</div>
 					<div class="question">
+						<label for="questionInput">Question:</label>
 						<input class="form-control" type="text" id="questionInput" placeholder="Enter your question here" maxlength="300" />
 					</div>
 					<div class="submit">
-						<button id="getHelpInPersonButton/" class="helpButton enqueueButton btn btn-success" style="height:50px;">I'm in person</button>
+						<button id="getHelpInPersonButton" class="helpButton enqueueButton btn btn-success" style="height:50px;">I'm in person</button>
 						<button id="getHelpOnZoomButton" class="helpButton enqueueButton btn btn-success" style="height:50px;">I'm on Zoom</button>
 						<button id="stopGettingHelped" class="helpButton btn btn-success" style="display: none"></button>
 						<br />
-						<span id="getHelpError">Enter a question or click Pass Off</span>
+						<span id="getHelpError" style="display: none">Enter a question or click Pass Off</span>
 					</div>
 					<!-- 
 					<div id="questionsRequired">
@@ -861,7 +868,7 @@ $isThisATA = $auth ? verifyTA(phpCAS::getUser()) : false;
 		<p style="padding-left:10px; padding-top:30px;">
 		<ul>
 			<li>You are currently logged in as: <b><?php echo phpCAS::getUser(); ?></b>.</li>
-			<li>The current average wait time for the top <span id="topCount"></span> people on the queue is <span id="topAvg"></span></li>
+			<li>The current average wait time for the top <span id="topCount"></span> people on the queue is <span id="topAvg"></span>.</li>
 			<li>The current length of the queue is <span id="queueLen"></span>.</li>
 			<li>The current number of people being helped is <span id="currentlyBeingHelped"></span>.</li>
 			<li>Number of people who got in line in the last <span class="lastXMin"></span> min: <span id="enqueueInLastXMin"></span>.</li>

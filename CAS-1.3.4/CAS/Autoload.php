@@ -73,33 +73,12 @@ function CAS_autoload($class)
     die ((string) $e);
 }
 
-// set up __autoload
-if (function_exists('spl_autoload_register')) {
-    if (!(spl_autoload_functions())
-        || !in_array('CAS_autoload', spl_autoload_functions())
-    ) {
-        spl_autoload_register('CAS_autoload');
-        if (function_exists('__autoload')
-            && !in_array('__autoload', spl_autoload_functions())
-        ) {
-            // __autoload() was being used, but now would be ignored, add
-            // it to the autoload stack
-            spl_autoload_register('__autoload');
-        }
-    }
-} elseif (!function_exists('__autoload')) {
 
-    /**
-     * Autoload a class
-     *
-     * @param string $class Class name
-     *
-     * @return bool
-     */
-    function __autoload($class)
-    {
-        return CAS_autoload($class);
-    }
+if (!(spl_autoload_functions())
+    || !in_array('CAS_autoload', spl_autoload_functions())
+) {
+    spl_autoload_register('CAS_autoload');
 }
+
 
 ?>

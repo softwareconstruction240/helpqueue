@@ -89,6 +89,7 @@ td {
     grid-template-rows: 1fr 1fr 1fr 1fr;
     grid-auto-columns: 1fr;
     gap: 0px 0px;
+    row-gap: 1em;
     grid-auto-flow: row;
     grid-template-areas:
         "options"
@@ -134,4 +135,12 @@ td {
 
 .helpButton.btn-danger {
     color: white;
+}
+
+#queue {
+    width: 90%;
+}
+
+.passoff-note {
+    font-style: italic;
 }
