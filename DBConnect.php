@@ -4,14 +4,22 @@ class MyDB extends SQLite3
 {
 	function __construct()
 	{
-		$dbName = '../../queuedb/database.sqlite';
-		$initDB = false;
-		$initDB = !file_exists($dbName);
+        // If DOCKER_DB_PATH is set, use it, otherwise use original path
+        $dbName = getenv('DOCKER_DB_PATH') ?: '../../queuedb/database.sqlite';
+        $initDB = false;
+
+        // Check if database exists
+        if (!file_exists($dbName)) {
+            $initDB = true;
+            // Create the database file if it doesn't exist
+            touch($dbName);
+            chmod($dbName, 0666);
+        }
 
 		$this->open($dbName);
 		$this->busyTimeout(15000);
 
-		if ($initDB) {
+		if ($initDB || getenv('DOCKER_DB_PATH')) {
 			chmod($dbName, 0777);
 			DBInit($this);
 
@@ -42,7 +50,7 @@ function DBInit($db)
 		$createTA = "CREATE TABLE IF NOT EXISTS TAS(NetId TEXT Not NULL, name TEXT, Counter INT Not NULL DEFAULT 0, PassOffCounter INT DEFAULT 0, Active Bit Default 1, UNIQUE(NetId))";
 		$createQueue = "CREATE TABLE IF NOT EXISTS QUEUE(NetId TEXT Not NULL, ENQUEUETIME INT Not NULL, QUEUENUM INT Not NULL, QUESTION TEXT, PASSOFF BIT, STARTEDGETTINGHELPTIME INT, BeingHelpedBy TEXT, ZOOMLINK TEXT, UNIQUE(NetId))";
 		$createSettings = "CREATE TABLE IF NOT EXISTS SETTINGS(name TEXT Not NULL, value TEXT NOT NULL, UNIQUE(name))";
-		$createQueueHistory = "CREATE TABLE IF NOT EXISTS QUEUEHISTORY(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,NetId TEXT NOT NULL, removedBy TEXT NOT NULL,enqueueTime INTEGER NOT NULL,	dequeueTime INTEGER NOT NULL, QUESTION TEXT, PASSOFF Bit, DoneGettingHelpTime INTEGER, ZOOMLINK TEXT,)";
+		$createQueueHistory = "CREATE TABLE IF NOT EXISTS QUEUEHISTORY(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,NetId TEXT NOT NULL, removedBy TEXT NOT NULL,enqueueTime INTEGER NOT NULL,	dequeueTime INTEGER NOT NULL, QUESTION TEXT, PASSOFF Bit, DoneGettingHelpTime INTEGER, ZOOMLINK TEXT)";
 
 		$insertMessage = "INSERT OR IGNORE INTO SETTINGS (name, value) VALUES ('message', 'No Current Message')";
 		$insertDisplayMessage = "INSERT OR IGNORE INTO SETTINGS (name, value) VALUES ('displayMessage', '0')";
