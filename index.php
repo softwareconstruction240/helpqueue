@@ -185,7 +185,7 @@ $isThisATA = $auth ? verifyTA(phpCAS::getUser()) : false;
 
 
 		<h4>
-			<center>Please join the <a target="_blank" rel="noopener noreferrer" href="https://join.slack.com/t/cs240-fall2024/shared_invite/zt-2pxui8a4w-Iyvq5X8xoiTKo8P2YPN~qg"> course Slack</a>. See our TA schedule <a target="_blank" rel="noopener noreferrer" href="https://docs.google.com/document/d/12ZrcsQAfVirCuCwzI0TKX_tSPyBOjqB9vDE-sx1n_S0/edit">here</a></center>
+			<center>Please join the <a target="_blank" rel="noopener noreferrer" href="https://cs240.click/slack"> course Slack</a>. See our TA schedule <a target="_blank" rel="noopener noreferrer" href="https://docs.google.com/document/d/12ZrcsQAfVirCuCwzI0TKX_tSPyBOjqB9vDE-sx1n_S0/edit">here</a></center>
 		</h4>
 
 
